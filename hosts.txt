@@ -1,0 +1,1 @@
+../devices/api-devices/bin/hosts.txt

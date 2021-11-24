@@ -1,0 +1,6 @@
+
+#api-devices-client==0.1.0
+git+git://github.com/ElectricAI/api-devices-client@master#egg=api-devices-client
+
+requests
+pytest
