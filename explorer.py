@@ -1,52 +1,24 @@
 """
-Exploring our Endpoints with requests
-
-Get devices
--------------------
-http://localhost:3000/local/v2/devices?customerId=9a919a42-b506-49ee-b053-402827b761b7
-http://localhost:3000/local/v2/devices?customerId=9a919a42-b506-49ee-b053-402827b761b7&assigned_to=4b74a197-09f6-4347-8ed7-5f8ff5165139
-
-Create devices
--------------------
-python3 devices.py seed --stage local --partition 9a919a42-b506-49ee-b053-402827b761b7 --macs 3 --windows 5
-python3 devices.py seed --stage local --partition 9a919a42-b506-49ee-b053-402827b761b7 --macs 3
-
-Assign devices
--------------------
-http://localhost:3000/local/v2/devices/:hostIdentifier/assignment
-
-
-
-"assigned_to":
-"assigned_by":
-"email": "javier.revilla@electric.ai",
-"id": "4b74a197-09f6-4347-8ed7-5f8ff5165139",
-
-"id": "1b940372-8044-4de8-a326-f62fe0952767",
-"email": "caitlin.griffin@electric.ai",
-
-hostIdentifier
-9a919a42-b506-49ee-b053-402827b761b7::0b4014c238cf79ab35bf95ee35f46b20
-9a919a42-b506-49ee-b053-402827b761b7::55a47c8b40162bbb9c82fe23fe8dd0ca
-9a919a42-b506-49ee-b053-402827b761b7::77b38a4e9ef8d5738fda8d9e0f461f63
+Explore endpoints with Requests library
 
 """
 import requests 
 import my_token
+import funcs
 
 
 endpoints = [
   #"https://dev.zengrc.com/health",
-  #"https://devices-staging.electric.ai/staging",
-  #"https://devices-staging.electric.ai/staging/v2/devices",
-  "https://devices-staging.electric.ai/staging/v2/devices?customerId=9a919a42-b506-49ee-b053-402827b761b7",
 
-  #"http://localhost:3000/local/v2/devices?customerId=9a919a42-b506-49ee-b053-402827b761b7",
-  #"http://localhost:3000/local/v2/devices?customerId=9a919a42-b506-49ee-b053-402827b761b7&assigned_to=4b74a197-09f6-4347-8ed7-5f8ff5165139",
-  #"http://localhost:3000/local/v2/devices?customerId=9a919a42-b506-49ee-b053-402827b761b7&assignedTo=4b74a197-09f6-4347-8ed7-5f8ff5165139",
+  # api-devices
+  #("api-devices", "https://devices-staging.electric.ai/staging"),
+  #("api-devices", "https://devices-staging.electric.ai/staging/v2/devices"),
+  #("api-devices", "https://devices-staging.electric.ai/staging/v2/devices?customerId=9a919a42-b506-49ee-b053-402827b761b7"),
+  ("api-devices", "http://localhost:3000/local/v2/devices?customerId=9a919a42-b506-49ee-b053-402827b761b7"),
+  ("api-devices", "http://localhost:3000/local/v2/devices?customerId=9a919a42-b506-49ee-b053-402827b761b7&assigned_to=4b74a197-09f6-4347-8ed7-5f8ff5165139"),
+  ("api-devices", "http://localhost:3000/local/v2/devices?customerId=9a919a42-b506-49ee-b053-402827b761b7&assignedTo=4b74a197-09f6-4347-8ed7-5f8ff5165139"),
  ]
 
-#ep = "https://devices-staging.electric.ai/staging/v2/devices?customerId=9a919a42-b506-49ee-b053-402827b761b7"
 
 healthy_status = 200
 
@@ -65,10 +37,15 @@ data = {}
 headers = {"Authorization": "Bearer " + token}
 #headers = {}
 
-for url in endpoints: 
+for ep in endpoints: 
+
+    api = ep[0]
+    url = ep[1]
 
     print('\nEndpoint: ', url)
+    print('API: ', api)
     print('GET\n')
+
 
     try: 
         #r = requests.get(url)
@@ -87,33 +64,10 @@ for url in endpoints:
         #print(r.json())
         #print()
 
-
-        data_json = r.json()['data']
-        print(data_json)
-
-        idx = 0
-        for d in data_json:
-
-            #if d['assigned']:
-            if True:
-                print(idx)
-                #print(d)
-                #print()
-                print(d['assigned'])
-                print('assigned_to:\t', d['assigned_to'])
-                #print(d['customer_id'])
-                print('host_identifier:', d['host_identifier'])
-                print(d['hostname'])
-                print(d['username'])
-                print()
-            idx += 1
-        print()
-        print('after:', r.json()['after'])
-        print('count:', r.json()['count'])
-        print('total:', r.json()['total'])
+        if api == "api-devices":
+            funcs.decode(r)
 
 
-        print()
         print(r.status_code)
         print('Server OK\n')
 

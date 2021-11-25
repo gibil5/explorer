@@ -5,3 +5,4 @@ pyvenv.cfg
 test_devices.py
 test_endpoints.py
 no_device_integration.py
+doc.py
